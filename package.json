@@ -1,0 +1,22 @@
+{
+  "name": "ngraph.offline.layout",
+  "version": "1.0.0",
+  "description": "Performs offline layout of large graphs and saves results to the disk",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ngraph",
+    "large",
+    "graph",
+    "offline",
+    "layout"
+  ],
+  "author": "Andrei Kashcha",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anvaka/ngraph.offline.layout"
+  }
+}
