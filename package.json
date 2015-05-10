@@ -18,5 +18,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/anvaka/ngraph.offline.layout"
+  },
+  "dependencies": {
+    "mkdirp": "^0.5.0",
+    "ngraph.forcelayout3d": "0.0.12"
   }
 }
