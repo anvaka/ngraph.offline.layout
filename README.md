@@ -3,8 +3,7 @@
 Performs offline 3D layout of large graphs and saves results to the disk. This is
 somewhat experimental.
 
-The results are saved into `data` folder by default. Note, subsequent runs will
-overwrite content of the folder. Be careful.
+The results are saved into `data` folder by default.
 
 # usage
 
