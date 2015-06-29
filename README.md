@@ -1,7 +1,7 @@
 # ngraph.offline.layout
 
 Performs offline 3D layout of large graphs and saves results to the disk. This is
-very experimental.
+somewhat experimental.
 
 The results are saved into `data` folder by default. Note, subsequent runs will
 overwrite content of the folder. Be careful.
@@ -19,8 +19,7 @@ layout.run();
 This will run the 3d `force-based layout` for `500` iterations. Each `5th`
 iteration is saved into `./data/{ITERATION_NUMBER}.bin` file.
 
-Every word in the paragraph above highlighted as `code symbol` can be changed via
-optionsa argument:
+The layout can be configured with options argument:
 
 ``` js
 // run only 100 iterations
