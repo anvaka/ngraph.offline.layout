@@ -1,6 +1,6 @@
 {
   "name": "ngraph.offline.layout",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Performs offline layout of large graphs and saves results to the disk",
   "main": "index.js",
   "scripts": {
