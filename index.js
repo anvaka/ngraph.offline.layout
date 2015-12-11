@@ -2,14 +2,17 @@ module.exports = createLayout;
 var path = require('path');
 var fs = require('fs');
 var mkdirp = require('mkdirp');
-var defaultLayout = require('ngraph.forcelayout3d');
+var layout3d = require('ngraph.forcelayout3d');
 
 function createLayout(graph, options) {
   options = options || {};
   var iterations = typeof options.iterations === 'number' ? options.iterations : 500;
   var saveEach = typeof options.saveEach === 'number' ? options.saveEach : 5;
   var outDir = typeof options.outDir === 'string' ? options.outDir : './data';
-  var layouter = typeof options.layout === 'function' ? options.layout : defaultLayout;
+  var is2d = options.is2d ? true : false;
+  var coordinatesPerRecord = is2d ? 2 : 3;
+  var intSize = 4;
+  var layouter = is2d ? layout3d.get2dLayout : layout3d;
   var layout = layouter(graph);
   if (!fs.existsSync(outDir)) {
     mkdirp.sync(outDir);
@@ -65,9 +68,14 @@ function createLayout(graph, options) {
     function initPosition(node) {
       var x = buf.readInt32LE(idx);
       var y = buf.readInt32LE(idx + 4);
-      var z = buf.readInt32LE(idx + 8);
-      layout.setNodePosition(node.id, x, y, z);
-      idx += 12;
+      if (is2d) {
+        layout.setNodePosition(node.id, x, y);
+        idx += 8;
+      } else {
+        var z = buf.readInt32LE(idx + 8);
+        layout.setNodePosition(node.id, x, y, z);
+        idx += 12;
+      }
     }
   }
 
@@ -82,18 +90,22 @@ function createLayout(graph, options) {
 
     console.log("Saving: ", fname);
     var nodesLength = graph.getNodesCount();
-    var buf = new Buffer(nodesLength * 4 * 3);
+    var buf = new Buffer(nodesLength * intSize * coordinatesPerRecord);
     var i = 0;
 
-    graph.forEachNode(function(node) {
-      var idx = i * 4 * 3;
-      var pos = layout.getNodePosition(node.id);
-      buf.writeInt32LE(pos.x, idx);
-      buf.writeInt32LE(pos.y, idx + 4);
-      buf.writeInt32LE(pos.z, idx + 8);
-      i++;
-    });
+    graph.forEachNode(saveNode);
 
     fs.writeFileSync(fname, buf);
+
+    function saveNode(node) {
+        var idx = i * intSize * coordinatesPerRecord;
+        var pos = layout.getNodePosition(node.id);
+        buf.writeInt32LE(pos.x, idx);
+        buf.writeInt32LE(pos.y, idx + 4);
+        if (!is2d) {
+          buf.writeInt32LE(pos.z, idx + 8);
+        }
+        i++;
+    }
   }
 }
