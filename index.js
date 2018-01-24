@@ -12,7 +12,8 @@ function createLayout(graph, options) {
   var is2d = options.is2d ? true : false;
   var coordinatesPerRecord = is2d ? 2 : 3;
   var intSize = 4;
-  var layouter = is2d ? layout3d.get2dLayout : layout3d;
+  var defaultLayouter = is2d ? layout3d.get2dLayout : layout3d;
+  var layouter = typeof options.layout === 'function' ? options.layout : defaultLayouter;
   var layout = layouter(graph);
   if (!fs.existsSync(outDir)) {
     mkdirp.sync(outDir);
