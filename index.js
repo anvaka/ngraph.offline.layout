@@ -9,6 +9,7 @@ function createLayout(graph, options) {
   var iterations = typeof options.iterations === 'number' ? options.iterations : 500;
   var saveEach = typeof options.saveEach === 'number' ? options.saveEach : 5;
   var outDir = typeof options.outDir === 'string' ? options.outDir : './data';
+  var logSteps = !!options.logSteps;
   var is2d = options.is2d ? true : false;
   var coordinatesPerRecord = is2d ? 2 : 3;
   var intSize = 4;
@@ -50,7 +51,8 @@ function createLayout(graph, options) {
     }
 
     for (var step = lastIteration + 1; step < iterations; ++step) {
-      console.log('Step ' + step);
+      if (logSteps)
+        console.log('Step ' + step);
       layout.step();
       if (step % saveEach === 0) {
         saveIteration(step);
