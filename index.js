@@ -5,6 +5,9 @@ var mkdirp = require('mkdirp');
 var layout3d = require('ngraph.forcelayout3d');
 
 function createLayout(graph, options) {
+  if (!graph) {
+    throw new Error('graph is required');
+  }
   options = options || {};
   var iterations = typeof options.iterations === 'number' ? options.iterations : 500;
   var saveEach = typeof options.saveEach === 'number' ? options.saveEach : 5;

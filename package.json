@@ -4,7 +4,7 @@
   "description": "Performs offline layout of large graphs and saves results to the disk",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tap test/*.js"
   },
   "keywords": [
     "ngraph",
@@ -22,5 +22,8 @@
   "dependencies": {
     "mkdirp": "^0.5.1",
     "ngraph.forcelayout3d": "^1.0.0"
+  },
+  "devDependencies": {
+    "tap": "^14.3.1"
   }
 }
