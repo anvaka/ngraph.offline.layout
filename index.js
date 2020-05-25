@@ -16,16 +16,21 @@ function createLayout(graph, options) {
   var coordinatesPerRecord = is2d ? 2 : 3;
   var intSize = 4;
   var layouter = is2d ? layout3d.get2dLayout : layout3d;
-  var layout = layouter(graph);
+  var layout = layouter(graph, options.layoutOptions);
   if (!fs.existsSync(outDir)) {
     mkdirp.sync(outDir);
   }
   var lastIteration = getLastIteration(outDir);
 
   return {
+    getLayout: getLayout,
     run: run,
     lastIteration: getLastIteration
   };
+
+  function getLayout() {
+    return layout;
+  }
 
   function getLastIteration() {
     var files = fs.readdirSync(outDir);
