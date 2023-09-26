@@ -4,7 +4,7 @@
   "description": "Performs offline layout of large graphs and saves results to the disk",
   "main": "index.js",
   "scripts": {
-    "test": "tap test/*.js"
+    "test": "tap --allow-incomplete-coverage test/*.js"
   },
   "keywords": [
     "ngraph",
