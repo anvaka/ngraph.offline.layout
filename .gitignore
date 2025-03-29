@@ -8,6 +8,7 @@ lib-cov
 *.gz
 
 .tap
+test-data/
 pids
 logs
 results

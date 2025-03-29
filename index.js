@@ -1,8 +1,9 @@
 module.exports = createLayout;
+
 var path = require('path');
 var fs = require('fs');
 var mkdirp = require('mkdirp');
-var layout3d = require('ngraph.forcelayout3d');
+var layoutFactory = require('ngraph.forcelayout');
 
 function createLayout(graph, options) {
   if (!graph) {
@@ -15,8 +16,12 @@ function createLayout(graph, options) {
   var is2d = options.is2d ? true : false;
   var coordinatesPerRecord = is2d ? 2 : 3;
   var intSize = 4;
-  var layouter = is2d ? layout3d.get2dLayout : layout3d;
-  var layout = layouter(graph, options.layoutOptions);
+  var layout = layoutFactory(graph, 
+    Object.assign({
+      dimensions: coordinatesPerRecord,
+    }, options.layoutOptions)
+  );
+
   if (!fs.existsSync(outDir)) {
     mkdirp.sync(outDir);
   }
@@ -46,6 +51,7 @@ function createLayout(graph, options) {
 
   function run(overwrite) {
     if (overwrite) {
+      cleanupPreviousIterations();
       lastIteration = 0;
     } else {
       if (lastIteration >= iterations) {
@@ -64,6 +70,17 @@ function createLayout(graph, options) {
       }
     }
     saveIteration('positions');
+  }
+
+  function cleanupPreviousIterations() {
+    var files = fs.readdirSync(outDir);
+    for (var i = 0; i < files.length; ++i) {
+      var match = files[i].match(/^(\d+)\.bin$/i);
+      if (!match) continue;
+      var fname = path.join(outDir, files[i]);
+      console.log('Deleting ' + fname);
+      fs.unlinkSync(fname);
+    }
   }
 
   function initLayout(iteration) {
@@ -89,7 +106,7 @@ function createLayout(graph, options) {
 
   function printLastIterationHelp() {
     console.log('The ' + outDir + ' already has ' + lastIteration + ' saved iterations.');
-    console.log('* If you want to overwite existing work call `layout.run(true)`');
+    console.log('* If you want to overwrite existing work call `layout.run(true)`');
     console.log('* If you want to perform more iterations set higher value for `options.iterations`');
   }
 
